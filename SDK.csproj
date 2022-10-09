@@ -4,6 +4,9 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <AssemblyName>Encryption-API-Services-SDK</AssemblyName>
+    <Description>This is the SDK for .NET Developers to take advantage of the Encryption API Services endpoint without having to build their own classes and implmention for consuming the services offered by the API.</Description>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
 </Project>
