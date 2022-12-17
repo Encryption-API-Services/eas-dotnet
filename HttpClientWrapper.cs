@@ -2,7 +2,7 @@
 
 namespace EncryptionAPIServicesSDK
 {
-    public sealed class HttpClientWrapper : HttpClient
+    internal sealed class HttpClientWrapper : HttpClient
     {
         private static HttpClientWrapper instance = null;
         private static readonly object padlock = new object();
