@@ -8,13 +8,13 @@ namespace EncryptionAPIServicesSDK
     {
         /// <summary>
         /// The consumer of the library should be able to set in their API Token as such
-        /// EASConfiguration.ApiToken = "MyApiToken";
+        /// EASConfiguration.ApiKey = "MyApiKey";
         /// </summary>
-        private static string _ApiToken;
-        public static string ApiToken
+        private static string _ApiKey;
+        public static string ApiKey
         {
-            get { return _ApiToken; }
-            set { _ApiToken = value; }
+            get { return _ApiKey; }
+            set { _ApiKey = value; }
         }
 
         /// <summary>
