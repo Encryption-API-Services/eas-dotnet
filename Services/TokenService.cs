@@ -28,8 +28,16 @@ namespace EncryptionAPIServicesSDK.Services
             string url = EASConfiguration.BaseUrl + String.Format("token");
             this._httpClient.DefaultRequestHeaders.Add("ApiKey", EASConfiguration.ApiKey);
             HttpResponseMessage response = await this._httpClient.GetAsync(url);
-            GetTokenResponse responseBody = JsonConvert.DeserializeObject<GetTokenResponse>(await response.Content.ReadAsStringAsync());
-            return responseBody.Token;
+            bool wasSuccessful = response.IsSuccessStatusCode;
+            if (wasSuccessful)
+            {
+                GetTokenResponse responseBody = JsonConvert.DeserializeObject<GetTokenResponse>(await response.Content.ReadAsStringAsync());
+                if (responseBody.Token != null)
+                {
+                    token = responseBody.Token;
+                }
+            }
+            return token;
         }
     }
 }
