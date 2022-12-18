@@ -25,7 +25,8 @@ namespace EncryptionAPIServicesSDK.Services
             {
                 throw new Exception("Please set your ApiKey provided in your dashboard to the EASConfiguration object.");
             }
-            string url = EASConfiguration.BaseUrl + String.Format("token?apiKey={0}", EASConfiguration.ApiKey);
+            string url = EASConfiguration.BaseUrl + String.Format("token");
+            this._httpClient.DefaultRequestHeaders.Add("ApiKey", EASConfiguration.ApiKey);
             HttpResponseMessage response = await this._httpClient.GetAsync(url);
             GetTokenResponse responseBody = JsonConvert.DeserializeObject<GetTokenResponse>(await response.Content.ReadAsStringAsync());
             return responseBody.Token;
