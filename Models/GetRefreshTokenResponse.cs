@@ -2,7 +2,7 @@
 
 namespace EncryptionAPIServicesSDK.Models
 {
-    public class GetRefreshTokenResponse
+    internal class GetRefreshTokenResponse
     {
         [JsonProperty("token")]
         public string Token { get; set; }
