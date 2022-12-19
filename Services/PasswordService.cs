@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,9 +29,8 @@ namespace EncryptionAPIServicesSDK.Services
             if (!this._httpClient.DefaultRequestHeaders.Contains("ApiKey"))
             {
                 this._httpClient.DefaultRequestHeaders.Add("ApiKey", EASConfiguration.ApiKey);
-
             }
-            this._httpClient.DefaultRequestHeaders.Add("Authorization", String.Format("Bearer {0}", token));
+            this._httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(token);
             string url = EASConfiguration.BaseUrl + "Password/BCryptEncrypt";
             BCryptHashPasswordRequest requestBody = new BCryptHashPasswordRequest()
             {

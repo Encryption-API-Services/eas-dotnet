@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace EncryptionAPIServicesSDK.Services
@@ -57,12 +58,7 @@ namespace EncryptionAPIServicesSDK.Services
                 throw new Exception("Please pass in an expired token to replace the existing token");
             }
             string url = EASConfiguration.BaseUrl + "token/RefreshToken";
-            if (!this._httpClient.DefaultRequestHeaders.Contains("ApiKey"))
-            {
-                this._httpClient.DefaultRequestHeaders.Add("ApiKey", EASConfiguration.ApiKey);
-
-            }
-            this._httpClient.DefaultRequestHeaders.Add("Authorization", String.Format("Bearer {0}", oldToken));
+            this._httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(oldToken);
             HttpResponseMessage response = await this._httpClient.GetAsync(url);
             GetRefreshTokenResponse responseBody = JsonConvert.DeserializeObject<GetRefreshTokenResponse>(await response.Content.ReadAsStringAsync());
             token = responseBody.Token;
