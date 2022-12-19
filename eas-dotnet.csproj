@@ -4,9 +4,16 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <AssemblyName>Encryption-API-Services-SDK</AssemblyName>
+    <AssemblyName>eas-dotnet</AssemblyName>
     <Description>This is the SDK for .NET Developers to take advantage of the Encryption API Services endpoint without having to build their own classes and implmention for consuming the services offered by the API.</Description>
     <Version>1.0.1</Version>
+    <RepositoryUrl>https://github.com/Encryption-API-Services/eas-dotnet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageId>$(AssemblyName)</PackageId>
+    <Title></Title>
+    <Authors>Mike Mulchrone</Authors>
+    <Company>Encryption API Services</Company>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
