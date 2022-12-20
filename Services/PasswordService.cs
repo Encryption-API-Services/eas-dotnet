@@ -1,4 +1,5 @@
 ﻿using EncryptionAPIServicesSDK.Models.Password;
+using EncryptionAPIServicesSDK.Password;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
@@ -26,10 +27,6 @@ namespace EncryptionAPIServicesSDK.Services
             {
                 throw new Exception("No password was passed into BCryptHashPassword to hash");
             }
-            if (!this._httpClient.DefaultRequestHeaders.Contains("ApiKey"))
-            {
-                this._httpClient.DefaultRequestHeaders.Add("ApiKey", EASConfiguration.ApiKey);
-            }
             this._httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(token);
             string url = EASConfiguration.BaseUrl + "Password/BCryptEncrypt";
             BCryptHashPasswordRequest requestBody = new BCryptHashPasswordRequest()
@@ -44,6 +41,38 @@ namespace EncryptionAPIServicesSDK.Services
                 hashedPassword = parsedBody.HashedPassword;
             }
             return hashedPassword;
+        }
+
+        public async Task<bool> BCryptVerifyPassword(string token, string hashedPassword, string password)
+        {
+            bool isValid = false;
+            if (string.IsNullOrEmpty(EASConfiguration.ApiKey))
+            {
+                throw new Exception("Please set your ApiKey provided in your dashboard to the EASConfiguration object.");
+            }
+            if (string.IsNullOrEmpty(hashedPassword))
+            {
+                throw new Exception("No hashed password was passed into BCryptVerifyPasssword to verify.");
+            }
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new Exception("No password was passed into BCryptVerifyPassword to verify");
+            }
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new Exception("There was no token provided to verify BCryptVerifyPassword");
+            }
+            this._httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(token);
+            string url = EASConfiguration.BaseUrl + "Password/BcryptVerify";
+            BCryptVerifyRequest requestBody = new BCryptVerifyRequest()
+            {
+                Password = password,
+                HashedPassword = hashedPassword
+            };
+            var jsonBody = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await this._httpClient.PostAsync(url, jsonBody);
+            BCryptVerifyResponse parsedResponse = JsonConvert.DeserializeObject<BCryptVerifyResponse>(await response.Content.ReadAsStringAsync());
+            return parsedResponse.IsValid;
         }
     }
 }
