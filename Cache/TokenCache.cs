@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EncryptionAPIServicesSDK.Cache
 {
-    public class TokenCache : ITokenCache
+    public class TokenCache
     {
         public string token { get; set; }
         public DateTime expirationTime { get; set; }
@@ -28,7 +28,6 @@ namespace EncryptionAPIServicesSDK.Cache
             }
             return this.token;
         }
-
         private async Task SetCache()
         {
             _tokenService = new TokenService();
@@ -52,16 +51,6 @@ namespace EncryptionAPIServicesSDK.Cache
             DateTime now = DateTime.UtcNow;
             var expSeconds = token.Claims.First(x => x.Type == "exp").Value;
             this.expirationTime = origin.AddSeconds(double.Parse(expSeconds));
-        }
-
-        Task ITokenCache.SetCache()
-        {
-            throw new NotImplementedException();
-        }
-
-        void ITokenCache.SetDate(JwtSecurityToken token)
-        {
-            throw new NotImplementedException();
         }
     }
 }
