@@ -43,7 +43,33 @@ namespace EncryptionAPIServicesSDK.Services
             }
             return hashedPassword;
         }
-
+        public async Task<bool> ScryptVerifyPassword(string token, string hashedPassword, string password)
+        {
+            bool isValid = false;
+            if (string.IsNullOrEmpty(EASConfiguration.ApiKey))
+            {
+                throw new Exception("Please set your ApiKey provided in your dashboard to the EASConfiguration object.");
+            }
+            if (string.IsNullOrEmpty(hashedPassword))
+            {
+                throw new Exception("No hashed password was passed into ScryptVerifyPassword to verify.");
+            }
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new Exception("No password was passed into ScryptVerifyPassword to verify");
+            }
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new Exception("There was no token provided to verify ScryptVerifyPassword");
+            }
+            this._httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(token);
+            string url = EASConfiguration.BaseUrl + "Password/SCryptVerify";
+            ScryptVerifyRequest requestBody = new ScryptVerifyRequest() { HashedPassword = hashedPassword, Password = password };
+            var jsonBody = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await this._httpClient.PostAsync(url, jsonBody);
+            ScryptVerifyResponse parsedResponse = JsonConvert.DeserializeObject<ScryptVerifyResponse>(await response.Content.ReadAsStringAsync());
+            return parsedResponse.IsValid;
+        }
         public async Task<string> Argon2HashPassword(string token, string passwordToHash)
         {
             string hashedPassword = string.Empty;
