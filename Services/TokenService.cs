@@ -28,7 +28,7 @@ namespace EncryptionAPIServicesSDK.Services
             {
                 throw new Exception("Please set your ApiKey provided in your dashboard to the EASConfiguration object.");
             }
-            string url = EASConfiguration.BaseUrl + "token";
+            string url = EASConfiguration.BaseUrl + "Token";
             if (!this._httpClient.DefaultRequestHeaders.Contains("ApiKey"))
             {
                 this._httpClient.DefaultRequestHeaders.Add("ApiKey", EASConfiguration.ApiKey);
