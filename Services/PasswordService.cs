@@ -20,6 +20,10 @@ namespace EncryptionAPIServicesSDK.Services
         public async Task<string> Argon2HashPassword(string token, string passwordToHash)
         {
             string hashedPassword = string.Empty;
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new Exception("There was no token provided to Argon2HashPassword to hash your password");
+            }
             if (string.IsNullOrEmpty(EASConfiguration.ApiKey))
             {
                 throw new Exception("Please set your ApiKey provided in your dashboard to the Argon2HashPassword object.");
@@ -41,6 +45,33 @@ namespace EncryptionAPIServicesSDK.Services
             return hashedPassword;
         }
 
+        public async Task<bool> Argon2VerifyPassword(string token, string hashedPassword, string password)
+        {
+            bool isValid = false;
+            if (string.IsNullOrEmpty(EASConfiguration.ApiKey))
+            {
+                throw new Exception("Please set your ApiKey provided in your dashboard to the EASConfiguration object.");
+            }
+            if (string.IsNullOrEmpty(hashedPassword))
+            {
+                throw new Exception("No hashed password was passed into Argon2VerifyPassword to verify.");
+            }
+            if (string.IsNullOrEmpty(password))
+            {
+                throw new Exception("No password was passed into Argon2VerifyPassword to verify");
+            }
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new Exception("There was no token provided to verify Argon2VerifyPassword");
+            }
+            this._httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(token);
+            string url = EASConfiguration.BaseUrl + "Password/Argon2Verify";
+            Argon2VerifyRequest requestBody = new Argon2VerifyRequest() { HashedPassword = hashedPassword, Password = password };
+            var jsonBody = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await this._httpClient.PostAsync(url, jsonBody);
+            Argon2VerifyResponse parsedResponse = JsonConvert.DeserializeObject<Argon2VerifyResponse>(await response.Content.ReadAsStringAsync());
+            return parsedResponse.IsValid;
+        }
         public async Task<string> BcryptHashPassword(string token, string password)
         {
             string hashedPassword = string.Empty;
