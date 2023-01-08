@@ -93,11 +93,11 @@ namespace EncryptionAPIServicesSDK.Services
             }
             this._httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(token);
             string url = EASConfiguration.BaseUrl + "Password/Argon2Verify";
-            //Argon2VerifyRequest requestBody = new Argon2VerifyRequest() { HashedPassword = hashedPassword, Password = password };
-            //var jsonBody = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
-            //HttpResponseMessage response = await this._httpClient.PostAsync(url, jsonBody);
-            //Argon2VerifyResponse parsedResponse = JsonConvert.DeserializeObject<Argon2VerifyResponse>(await response.Content.ReadAsStringAsync());
-            //return parsedResponse.IsValid;
+            Argon2VerifyRequest requestBody = new Argon2VerifyRequest() { HashedPassword = hashedPassword, Password = password };
+            var jsonBody = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await this._httpClient.PostAsync(url, jsonBody);
+            Argon2VerifyResponse parsedResponse = JsonConvert.DeserializeObject<Argon2VerifyResponse>(await response.Content.ReadAsStringAsync());
+            return parsedResponse.IsValid;
         }
         public async Task<string> BcryptHashPassword(string token, string password)
         {
