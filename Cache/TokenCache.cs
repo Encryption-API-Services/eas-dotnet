@@ -10,7 +10,7 @@ namespace EncryptionAPIServicesSDK.Cache
     {
         public string token { get; set; }
         public DateTime expirationTime { get; set; }
-        public TokenService _tokenService { get; set; }
+        internal TokenService _tokenService { get; set; }
 
         public TokenCache()
         {

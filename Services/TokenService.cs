@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EncryptionAPIServicesSDK.Services
 {
-    public class TokenService
+    internal class TokenService
     {
         private readonly HttpClientWrapper _httpClient;
         public TokenService()
