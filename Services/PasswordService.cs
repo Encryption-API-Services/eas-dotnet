@@ -16,6 +16,31 @@ namespace EncryptionAPIServicesSDK.Services
         {
             this._httpClient = HttpClientWrapper.Instance;
         }
+
+        public async Task<string> Argon2HashPassword(string token, string passwordToHash)
+        {
+            string hashedPassword = string.Empty;
+            if (string.IsNullOrEmpty(EASConfiguration.ApiKey))
+            {
+                throw new Exception("Please set your ApiKey provided in your dashboard to the Argon2HashPassword object.");
+            }
+            if (string.IsNullOrEmpty(passwordToHash))
+            {
+                throw new Exception("No password was passed into Argon2HashPassword to hash");
+            }
+            this._httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(token);
+            string url = EASConfiguration.BaseUrl + "Password/Argon2Hash";
+            Argon2HashPasswordRequest requestBody = new Argon2HashPasswordRequest() { PasswordToHash = passwordToHash };
+            StringContent jsonData = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
+            HttpResponseMessage httpResponse = await this._httpClient.PostAsync(url, jsonData);
+            Argon2HashPasswordResponse parsedBody = JsonConvert.DeserializeObject<Argon2HashPasswordResponse>(await httpResponse.Content.ReadAsStringAsync());
+            if (parsedBody.HashedPassword != null)
+            {
+                hashedPassword = parsedBody.HashedPassword;
+            }
+            return hashedPassword;
+        }
+
         public async Task<string> BcryptHashPassword(string token, string password)
         {
             string hashedPassword = string.Empty;
